@@ -1,11 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 
-@Controller()
+@Controller('api')
 export class AppController {
   @Get()
-  hello() {
+  status() {
     return {
-      message: 'Hello NestJS',
+      app: 'NestJS App',
+      status: 'Running',
+      deployedBy: 'Jenkins CI/CD',
     };
   }
 }
+
