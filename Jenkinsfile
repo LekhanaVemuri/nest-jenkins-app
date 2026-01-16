@@ -3,27 +3,18 @@ pipeline {
 
     stages {
 
-        stage('Install Dependencies') {
+        stage('Checkout Code') {
             steps {
-                echo 'Installing dependencies with legacy peer deps...'
-                sh 'npm install --legacy-peer-deps'
+                echo '📥 Checking out code from GitHub...'
+                checkout scm
             }
         }
 
-        stage('Build Application') {
+        stage('Deploy Application') {
             steps {
-                echo 'Building NestJS application...'
-                sh 'npm run build'
-            }
-        }
-
-        stage('Restart Application') {
-            steps {
-                echo 'Restarting application using PM2...'
+                echo '🚀 Running update.sh for deployment...'
                 sh '''
-                  pm2 delete nest-jenkins-app || true
-                  pm2 start dist/main.js --name nest-jenkins-app
-                  pm2 save
+                  /home/ubuntu/update.sh
                 '''
             }
         }
@@ -31,10 +22,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Deployment successful! Application is running.'
+            echo '✅ Deployment completed successfully using update.sh'
         }
         failure {
-            echo '❌ Deployment failed. Check logs above.'
+            echo '❌ Deployment failed. Check update.sh output.'
         }
     }
 }
